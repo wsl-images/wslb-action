@@ -1,0 +1,32 @@
+name: 'WSLB Latest Release Executor'
+description: 'Downloads the latest wslb_Linux_x86_64.tar.gz, extracts it, and runs specified commands.'
+author: 'Your Name'
+inputs:
+  command:
+    description: 'The command to execute using the wslb binary.'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Fetch latest release data
+      id: fetch_release
+      shell: bash
+      run: |
+        api_url="https://api.github.com/repos/wsl-images/wslb/releases/latest"
+        release_data=$(curl -s $api_url)
+        asset_url=$(echo $release_data | jq -r '.assets[] | select(.name == "wslb_Linux_x86_64.tar.gz") | .browser_download_url')
+        echo "asset_url=$asset_url" >> $GITHUB_ENV
+    - name: Download wslb_Linux_x86_64.tar.gz
+      shell: bash
+      run: |
+        curl -L ${{ env.asset_url }} -o wslb_Linux_x86_64.tar.gz
+    - name: Extract wslb_Linux_x86_64.tar.gz
+      shell: bash
+      run: |
+        mkdir -p wslb_extracted
+        tar -xzf wslb_Linux_x86_64.tar.gz -C wslb_extracted
+    - name: Run specified command
+      shell: bash
+      run: |
+        chmod +x wslb_extracted/wslb
+        ./wslb_extracted/wslb ${{ inputs.command }}
