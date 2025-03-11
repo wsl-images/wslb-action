@@ -1,9 +1,9 @@
-name: 'WSLB Latest Release Executor'
+name: 'WSLB Build'
 description: 'Downloads the latest wslb_Linux_x86_64.tar.gz, extracts it, and runs specified commands.'
-author: 'Your Name'
+author: 'Steven Buglione'
 inputs:
-  command:
-    description: 'The command to execute using the wslb binary.'
+  image:
+    description: 'The image you want to convert into a .wsl file'
     required: true
 runs:
   using: 'composite'
@@ -14,8 +14,27 @@ runs:
       run: |
         api_url="https://api.github.com/repos/wsl-images/wslb/releases/latest"
         release_data=$(curl -s $api_url)
+        # Check if jq is installed, install if not available
+        if ! command -v jq &> /dev/null; then
+          echo "jq not found, installing..."
+          if command -v apt-get &> /dev/null; then
+            sudo apt-get update && sudo apt-get install -y jq
+          elif command -v yum &> /dev/null; then
+            sudo yum install -y jq
+          elif command -v apk &> /dev/null; then
+            apk add --no-cache jq
+          else
+            echo "Could not install jq automatically. Using fallback method."
+            # Fallback to grep/sed if jq installation fails
+            asset_url=$(echo "$release_data" | grep -o '"browser_download_url": "[^"]*wslb_Linux_x86_64.tar.gz"' | sed 's/"browser_download_url": "\(.*\)"/\1/')
+            echo "asset_url=$asset_url" >> $GITHUB_ENV
+            exit 0
+          fi
+        fi
+
         asset_url=$(echo $release_data | jq -r '.assets[] | select(.name == "wslb_Linux_x86_64.tar.gz") | .browser_download_url')
         echo "asset_url=$asset_url" >> $GITHUB_ENV
+
     - name: Download wslb_Linux_x86_64.tar.gz
       shell: bash
       run: |
@@ -29,4 +48,4 @@ runs:
       shell: bash
       run: |
         chmod +x wslb_extracted/wslb
-        ./wslb_extracted/wslb ${{ inputs.command }}
+        ./wslb_extracted/wslb build ${{ inputs.image }} --output ${{ inputs.output_dir }}

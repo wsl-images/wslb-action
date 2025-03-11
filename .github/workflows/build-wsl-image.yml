@@ -1,0 +1,29 @@
+name: Build WSL Image
+
+on:
+  workflow_dispatch:  # Allows manual triggering
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Create output directory
+        run: mkdir -p wsl-output
+
+      - name: Build WSL image
+        uses: wsl-images/wslb-action@0.0.1
+        with:
+          image: ubuntu:latest
+          output_dir: wsl-output
+
+      - name: List created files
+        run: |
+          echo "Listing contents of output directory:"
+          ls -la wsl-output/
+          echo "Checking file type:"
+          file wsl-output/* || echo "No files found or file command failed"
