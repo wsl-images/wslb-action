@@ -51,4 +51,4 @@ runs:
       shell: bash
       run: |
         chmod +x wslb_extracted/wslb
-        ./wslb_extracted/wslb build ${{ inputs.image }} --output ${{ inputs.output_dir }}
+        ./wslb_extracted/wslb build ${{ inputs.image }} --output ${{ inputs.outputs_dir }}
