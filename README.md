@@ -83,7 +83,7 @@ https://github.com/wsl-images/wslb-action/actions/runs/13777980530/job/385308979
 ## Related Projects
 
 - [wslb](https://github.com/wsl-images/wslb) - The command-line tool that powers this action
-- [wsl-images](https://github.com/wsl-images) - Organization maintaining WSL-related tools and images
+- [images](https://github.com/wsl-images/images) - A GitHub Action workflow that automatically builds and maintains Docker images of the official Windows Subsystem for Linux (WSL) distributions.
 
 ## License
 
