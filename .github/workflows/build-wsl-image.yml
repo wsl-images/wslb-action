@@ -11,14 +11,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      
+
       - name: Create output directory
         run: mkdir -p wsl-output
 
       - name: Build WSL image
         uses: wsl-images/wslb-action@0.0.1
         with:
-          image: ubuntu:latest
+          image: ghcr.io/wsl-images/ubuntu:latest
           output_dir: wsl-output
 
       - name: List created files
