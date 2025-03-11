@@ -3,8 +3,11 @@ description: 'Downloads the latest wslb_Linux_x86_64.tar.gz, extracts it, and ru
 author: 'Steven Buglione'
 inputs:
   image:
-    description: 'The image you want to convert into a .wsl file'
+    description: 'Docker image to convert to WSL format'
     required: true
+  outputs_dir:
+    description: 'Directory where the .wsl file will be saved'
+    required: false
 runs:
   using: 'composite'
   steps:
