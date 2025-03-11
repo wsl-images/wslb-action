@@ -78,7 +78,7 @@ The action performs these steps:
 ## Successful Run Example
 
 A successful run of this action can be viewed at:
-https://github.com/wsl-images/wslb-action/actions/runs/13777980530/job/38530897953
+https://github.com/wsl-images/wslb-action/actions/runs/13778212256
 
 ## Related Projects
 
