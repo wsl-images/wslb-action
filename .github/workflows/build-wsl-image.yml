@@ -16,7 +16,7 @@ jobs:
         run: mkdir -p wsl-output
 
       - name: Build WSL image
-        uses: wsl-images/wslb-action@0.0.1
+        uses: wsl-images/wslb-action@v0.0.1
         with:
           image: ghcr.io/wsl-images/ubuntu:latest
           output_dir: wsl-output
